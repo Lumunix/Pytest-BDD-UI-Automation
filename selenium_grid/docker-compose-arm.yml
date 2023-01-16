@@ -1,0 +1,28 @@
+# For M1 Macs, This docker compose file starts an arm specific selenium grid.
+# Add the `-d` flag at the end for detached execution
+# To stop the execution, hit Ctrl+C, and then `docker-compose -f docker-compose-v3-dev-channel.yml down`
+version: "3"
+services:
+    node-chrome:
+      image: seleniarm/node-chromium:107.0
+      volumes:
+        - ./assets:/opt/selenium/assets
+        - ./config.toml:/opt/bin/config.toml
+        - /var/run/docker.sock:/var/run/docker.sock
+      depends_on:
+        - seleniarm-hub
+      environment:
+        - SE_EVENT_BUS_HOST=seleniarm-hub
+        - SE_EVENT_BUS_PUBLISH_PORT=4442
+        - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+        - SE_NODE_MAX_INSTANCES=3
+        - SE_NODE_MAX_SESSIONS=3
+        - VNC_NO_PASSWORD=1
+    seleniarm-hub:
+      image: seleniarm/hub:4.5.3-20221025
+      container_name: seleniarm-hub
+      ports:
+        - "4442:4442"
+        - "4443:4443"
+        - "4444:4444"
+
