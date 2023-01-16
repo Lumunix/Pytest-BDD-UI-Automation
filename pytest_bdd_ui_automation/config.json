@@ -1,0 +1,6 @@
+{
+  "selenium_hub_url": "http://localhost:4444/wd/hub",
+  "browser": "chrome",
+  "headless": false,
+  "implicit_wait": 10
+}
