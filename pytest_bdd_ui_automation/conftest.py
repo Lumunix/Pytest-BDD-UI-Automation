@@ -4,12 +4,8 @@ import pytest
 import json
 from datetime import datetime
 from selenium.webdriver import Remote
-from alert_console_tests.DriverFactory import DriverFactory
-from alert_rest_services.utils.AuthConfig import UtilsClass
+from pytest_bdd_ui_automation.DriverFactory import DriverFactory
 
-from alert_rest_services.utils.AuthConfig import UtilsClass
-from alert_rest_services.services.grpc_service.Coreservice.BaseTestclass import Basetest
-from alert_rest_services.services.grpc_service.HelperMethods.HelperMethodMixin import HelperMethod
 
 DEFAULT_CONFIG_PATH = 'config.json'
 pytest_plugins = [
@@ -114,55 +110,3 @@ def pytest_runtest_makereport(item, call):
             extra.append(pytest_html.extras.url(driver.current_url))
             extra.append(pytest_html.extras.image(screenshot_path))
         report.extra = extra
-
-
-
-# GRPC FIXTURES
-def pytest_configure():
-    UtilsClass.util_initialize()
-    pytest.authkey = UtilsClass.request_auth_token()
-    pytest.pathname = os.path.join(os.path.dirname(os.path.abspath(__file__)), "resources",
-                                   "testdata")
-
-
-@pytest.fixture
-def grpc_core():
-    """
-    Fixture method to provided the grpcs channels for all the services. With this object, you can access all the
-    service channel
-    """
-    grpc_core = Basetest.get_instance()
-    UtilsClass.util_initialize()
-    pytest.authkey = UtilsClass.request_auth_token()
-    return grpc_core
-
-
-@pytest.fixture()
-def helper_method():
-    """
-    fixture methods to retrieve the helpermethods for all the services
-    """
-    helper_method = HelperMethod()
-    return helper_method
-
-
-@pytest.fixture
-def grpc_core():
-    """
-    Fixture method to provided the grpcs channels for all the services. With this object, you can access all the
-    service channel
-    """
-    grpc_core = Basetest.get_instance()
-    UtilsClass.util_initialize()
-    pytest.authkey = UtilsClass.request_auth_token()
-    return grpc_core
-
-
-@pytest.fixture()
-def helper_method():
-    """
-    fixture methods to retrieve the helpermethods for all the services
-    """
-    helper_method = HelperMethod()
-    return helper_method
-
