@@ -8,10 +8,6 @@ from pytest_bdd_ui_automation.DriverFactory import DriverFactory
 
 
 DEFAULT_CONFIG_PATH = 'config.json'
-pytest_plugins = [
-    "alert_console_tests.steps.common",
-    "alert_console_tests.steps.grpc"]
-
 
 def pytest_addoption(parser):
     """ Parse pytest --option variables from shell """
