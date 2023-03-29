@@ -4,7 +4,7 @@ import pytest
 import json
 from datetime import datetime
 from selenium.webdriver import Remote
-from pytest_bdd_ui_automation.DriverFactory import DriverFactory
+from DriverFactory import DriverFactory
 
 
 DEFAULT_CONFIG_PATH = 'config.json'
