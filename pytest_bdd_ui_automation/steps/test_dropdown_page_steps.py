@@ -1,5 +1,5 @@
 from pytest_bdd import scenarios, when, then, parsers
-from pages.dropdown import DropdownPage
+from pytest_bdd_ui_automation.pages.dropdown import DropdownPage
 from sttable import parse_str_table
 
 scenarios('../features/dropdown_page.feature')

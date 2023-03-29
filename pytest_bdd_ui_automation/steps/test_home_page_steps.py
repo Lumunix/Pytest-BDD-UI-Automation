@@ -1,6 +1,6 @@
 from pytest_bdd import scenarios, when, then, parsers
-from pages.home import HomePage
-from pages.base import BasePage
+from pytest_bdd_ui_automation.pages.home import HomePage
+from pytest_bdd_ui_automation.pages.base import BasePage
 from sttable import parse_str_table
 
 scenarios('../features/home_page.feature')
@@ -26,6 +26,7 @@ def verify_subpage_list(browser, datatable, subpages):
     expected = parse_str_table(subpages)
     for field in expected.fields:
         assert expected.columns[field] == HomePage(browser).get_subpage_list()
+
 
 @then('the <page> page opens')
 def verify_page_opens(browser, page):

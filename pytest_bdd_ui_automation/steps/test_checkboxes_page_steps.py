@@ -1,5 +1,5 @@
 from pytest_bdd import scenarios, when, then, parsers
-from pages.checkboxes import CheckboxesPage
+from pytest_bdd_ui_automation.pages.checkboxes import CheckboxesPage
 from sttable import parse_str_table
 
 scenarios('../features/checkboxes_page.feature')

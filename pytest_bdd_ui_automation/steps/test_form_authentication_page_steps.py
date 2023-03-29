@@ -1,6 +1,6 @@
 from pytest_bdd import scenarios, when, then, parsers
-from pages.base import BasePage
-from pages.form_authentication import FormAuthenticationPage
+from pytest_bdd_ui_automation.pages.base import BasePage
+from pytest_bdd_ui_automation.pages.form_authentication import FormAuthenticationPage
 
 scenarios('../features/form_authentication_page.feature')
 

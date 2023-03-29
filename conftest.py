@@ -1,11 +1,14 @@
 import logging
 import os
 import pytest
+import allure
 import json
 from datetime import datetime
 from selenium.webdriver import Remote
-from DriverFactory import DriverFactory
-
+from WebDriverFactory import WebDriverFactory
+from pytest_bdd import given, then, parsers
+from allure_commons.types import AttachmentType
+from pytest_bdd_ui_automation.pages.base import BasePage
 
 DEFAULT_CONFIG_PATH = 'config.json'
 
@@ -19,20 +22,6 @@ def pytest_addoption(parser):
 def config_arg(request):
     """ :returns Config path from --config option """
     return request.config.getoption('--config')
-
-
-@pytest.fixture
-def url():
-    namespace = os.environ.get('NAMESPACE')
-    kubernetes_cluster = os.environ.get('KUBERNETES_CLUSTER')
-    if not namespace:
-        raise Exception(f'NAMESPACE environment variable not set, '
-                        f'set using export NAMESPACE=YOUR_NAMESPACE or in ~/bash_profile.')
-    if not kubernetes_cluster:
-        raise Exception(f'KUBERNETES_CLUSTER environment variable not set, '
-                        f'set using export KUBERNETES_CLUSTER=CLUSTER_NAME or in ~/bash_profile.')
-
-    return f'http://{namespace}.{kubernetes_cluster}.do-alert-innovation.com/{namespace}/acs/console'
 
 
 @pytest.fixture
@@ -59,42 +48,75 @@ def config(config_arg):
 
 
 @pytest.fixture
-def browser(config, url) -> Remote:
+def browser(config) -> Remote:
     """ Select configuration depends on browser and host """
     # Configure browser and driver
-    driver = DriverFactory().get_driver(config)
+    driver = WebDriverFactory().get_driver(config)
 
     # Make call wait up to 10 seconds for elements to appear
     driver.implicitly_wait(config['implicit_wait'])
 
     logging.info(f"BROWSER RESOLUTION: {str(driver.get_window_size())}")
-    logging.info(f'URL: {url}')
-
     yield driver
     driver.quit()
 
-
 @pytest.fixture
-def pages(url):
-    return {
-        "login": f'{url}' + "/login",
-        "bots": f'{url}' + "/home/system/bots",
-        "totes": f'{url}' + "/home/system/totes",
-        "workstations": f'{url}' + "/home/system/workstations",
-        "safety": f'{url}' + "/home/system/safety",
-        "activity": f'{url}' + "/home/system/activity",
-        "user areas": f'{url}' + "/home/system/userAreas",
-        "configs": f'{url}' + "/home/system/configs",
-        "user actions": f'{url}' + "/home/userActions",
-        "bot cycles": f'{url}' + "/home/testing/botCycles"
-    }
+def datatable():
+    return DataTable()
+
+
+class DataTable(object):
+
+    def __init__(self):
+        pass
+
+    def __str__(self):
+        dt_str = ''
+        for field, value in self.__dict__.items():
+            dt_str = f'{dt_str}\n{field} = {value}'
+        return dt_str
+
+    def __repr__(self) -> str:
+        return self.__str__()
+
+
+@given(parsers.parse('I have navigated to the \'the-internet\' "{page_name}" page'), target_fixture='navigate_to')
+def navigate_to(browser, page_name):
+    url = BasePage.PAGE_URLS.get(page_name.lower())
+    browser.get(url)
+
+
+@then(parsers.parse('a "{text}" banner is displayed in the top-right corner of the page'))
+def verify_banner_text(browser, text):
+    url = 'https://github.com/tourdedave/the-internet'
+    assert text == BasePage(browser).get_github_fork_banner_text()
+    assert url == BasePage(browser).get_github_fork_banner_link()
+    styleAttrs = BasePage(browser).get_github_fork_banner_position().split(";")
+    for attr in styleAttrs:
+        if attr.startswith("position"):
+            assert "absolute" == attr.split(": ")[1]
+        if attr.startswith("top"):
+            assert "0px" == attr.split(": ")[1]
+        if attr.startswith("right"):
+            assert "0px" == attr.split(": ")[1]
+        if attr.startswith("border"):
+            assert "0px" == attr.split(": ")[1]
+
+
+@then(parsers.parse('the page has a footer containing "{text}"'))
+def verify_footer_text(browser, text):
+    assert text == BasePage(browser).get_page_footer_text()
+
+
+@then(parsers.parse('the link in the page footer goes to "{url}"'))
+def verify_footer_link_url(browser, url):
+    assert url == BasePage(browser).get_page_footer_link_url()
+
 
 @pytest.hookimpl(hookwrapper=True)
-def pytest_runtest_makereport(item, call):
-    pytest_html = item.config.pluginmanager.getplugin('html')
+def pytest_allure_image_attach(item):
     outcome = yield
     report = outcome.get_result()
-    extra = getattr(report, 'extra', [])
     if report.when == 'call':
         feature_request = item.funcargs['request']
         driver = feature_request.getfixturevalue('browser')
@@ -103,6 +125,5 @@ def pytest_runtest_makereport(item, call):
             timestamp = datetime.now().strftime('%m-%d-%Y:%H-%M-%S')
             screenshot_path = report.head_line + ':' + timestamp + '.png'
             driver.save_screenshot(screenshot_path)
-            extra.append(pytest_html.extras.url(driver.current_url))
-            extra.append(pytest_html.extras.image(screenshot_path))
-        report.extra = extra
+            allure.attach(driver.get_screenshot_as_png(), name=screenshot_path, attachment_type=AttachmentType.PNG)
+

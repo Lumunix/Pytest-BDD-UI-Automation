@@ -1,6 +1,6 @@
 import pytest
 from pytest_bdd import scenarios, given, when, then, parsers
-from pages.dynamic_controls import DynamicControlsPage
+from pytest_bdd_ui_automation.pages.dynamic_controls import DynamicControlsPage
 from sttable import parse_str_table
 
 scenarios('../features/dynamic_controls_page.feature')
