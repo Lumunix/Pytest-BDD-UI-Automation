@@ -114,7 +114,7 @@ def verify_footer_link_url(browser, url):
 
 
 @pytest.hookimpl(hookwrapper=True)
-def pytest_allure_image_attach(item):
+def pytest_runtest_makereport(item, call):
     outcome = yield
     report = outcome.get_result()
     if report.when == 'call':
