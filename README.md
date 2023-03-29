@@ -11,12 +11,10 @@ NB This is not a complete implementation of a Selenium test suite for the target
     ```
 ### Setting up Selenium Grid
 ```shell script
-brew install socat
-```
-```shell script
-socat -4 TCP-LISTEN:2375,fork UNIX-CONNECT:/var/run/docker.sock
-```
-```shell script
+# Arm Machines (M1 Apple Compatible)
 docker compose -f docker-compose-arm.yml up
+
+# x86 Machines
+docker compose -f docker-compose.yml up
 ```
 
