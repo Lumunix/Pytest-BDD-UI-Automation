@@ -19,3 +19,4 @@ docker compose -f docker-compose.yml up
 ```
 
 http://localhost:5050/allure-docker-service/projects/default
+http://localhost:5252/allure-docker-service-ui/projects/default

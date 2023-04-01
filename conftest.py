@@ -123,7 +123,6 @@ def pytest_runtest_makereport(item, call):
         xfail = hasattr(report, 'wasxfail')
         if (report.skipped and xfail) or (report.failed and not xfail):
             timestamp = datetime.now().strftime('%m-%d-%Y:%H-%M-%S')
-            screenshot_path = report.head_line + ':' + timestamp + '.png'
-            driver.save_screenshot(screenshot_path)
-            allure.attach(driver.get_screenshot_as_png(), name=screenshot_path, attachment_type=AttachmentType.PNG)
+            screenshot = report.head_line + ':' + timestamp + '.png'
+            allure.attach(driver.get_screenshot_as_png(), name=screenshot, attachment_type=AttachmentType.PNG)
 
