@@ -6,7 +6,7 @@ from sttable import parse_str_table
 scenarios('../features/home_page.feature')
 
 
-@when('I click on the <page> link')
+@when(parsers.parse('I click on the {page} link'))
 def click_page_link(browser, page):
     HomePage(browser).click_page_link(page)
 
@@ -28,6 +28,6 @@ def verify_subpage_list(browser, datatable, subpages):
         assert expected.columns[field] == HomePage(browser).get_subpage_list()
 
 
-@then('the <page> page opens')
+@then(parsers.parse('the {page} page opens'))
 def verify_page_opens(browser, page):
     assert BasePage.PAGE_URLS.get(page.lower()) == HomePage(browser).get_current_url()
