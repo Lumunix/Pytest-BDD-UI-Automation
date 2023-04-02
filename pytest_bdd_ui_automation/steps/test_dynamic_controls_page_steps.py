@@ -121,12 +121,6 @@ def verify_loading_bar_disappears(browser):
     assert False == DynamicControlsPage(browser).is_loading_bar_displayed()
 
 
-@then('the checkbox is no longer displayed')
-def verify_checkbox_not_displayed(browser):
-    assert 0 == DynamicControlsPage(
-        browser).get_num_checkboxes_in_section('Remove/add')
-
-
 @then(parsers.parse('an "{message}" message is displayed'))
 def verify_message_text(browser, message):
     assert message == DynamicControlsPage(browser).get_message_text()
