@@ -1,5 +1,5 @@
 from pytest_bdd import scenarios, when, then, parsers
-from pages.checkboxes import CheckboxesPage
+from pytest_bdd_ui_automation.pages.checkboxes import CheckboxesPage
 from sttable import parse_str_table
 
 scenarios('../features/checkboxes_page.feature')
@@ -8,7 +8,7 @@ ORDINALS = ['st', 'nd', 'rd', 'th']
 CHECK_STATES = ['checked', 'unchecked']
 
 
-@when('I click on the <ordinal> checkbox')
+@when(parsers.parse('I click on the {ordinal} checkbox'))
 def click_checkbox(browser, ordinal):
     index = int(ordinal[0:len(ordinal)-2]) - 1
     assert isinstance(index, int)
@@ -47,7 +47,7 @@ def verify_checkbox_state(browser, index, ordinal, state):
         assert checked_state == False
 
 
-@then('the <ordinal> checkbox is <state>')
+@then(parsers.parse('the {ordinal} checkbox is {state}'))
 def verify_checkbox_state(browser, ordinal, state):
     # assert isinstance(index, int)
     # assert index > 0
@@ -60,10 +60,10 @@ def verify_checkbox_state(browser, ordinal, state):
     else:
         assert checked_state == False
 
-@then('the <ordinal> checkbox is <first_state>')
+@then(parsers.parse('the {ordinal} checkbox is {first_state}'))
 def verify_checkbox_first_state(browser, ordinal, first_state):
   verify_checkbox_state(browser, ordinal, first_state)
 
-@then('the <ordinal> checkbox is <second_state>')
+@then(parsers.parse('the {ordinal} checkbox is {second_state}'))
 def verify_checkbox_second_state(browser, ordinal, second_state):
   verify_checkbox_state(browser, ordinal, second_state)

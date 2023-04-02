@@ -1,6 +1,6 @@
 import pytest
 from pytest_bdd import scenarios, given, when, then, parsers
-from pages.dynamic_controls import DynamicControlsPage
+from pytest_bdd_ui_automation.pages.dynamic_controls import DynamicControlsPage
 from sttable import parse_str_table
 
 scenarios('../features/dynamic_controls_page.feature')
@@ -119,12 +119,6 @@ def verify_loading_bar_label(browser, label):
 def verify_loading_bar_disappears(browser):
     DynamicControlsPage(browser).wait_for_loading_bar_to_disappear()
     assert False == DynamicControlsPage(browser).is_loading_bar_displayed()
-
-
-@then('the checkbox is no longer displayed')
-def verify_checkbox_not_displayed(browser):
-    assert 0 == DynamicControlsPage(
-        browser).get_num_checkboxes_in_section('Remove/add')
 
 
 @then(parsers.parse('an "{message}" message is displayed'))

@@ -1,11 +1,11 @@
 from pytest_bdd import scenarios, when, then, parsers
-from pages.dropdown import DropdownPage
+from pytest_bdd_ui_automation.pages.dropdown import DropdownPage
 from sttable import parse_str_table
 
 scenarios('../features/dropdown_page.feature')
 
 
-@when('I select "<option_text>" from the dropdown list')
+@when(parsers.parse('I select "{option_text}" from the dropdown list'))
 def select_dropdown_option_by_text(browser, option_text):
     DropdownPage(browser).select_option_by_text(option_text)
 
@@ -45,7 +45,7 @@ def verify_only_single_selection(browser):
     assert False == DropdownPage(browser).get_dropdown_supports_multi_select()
 
 
-@then('the dropdown value is "<option_text>"')
+@then(parsers.parse('the dropdown value is "{option_text}"'))
 @then(parsers.parse('the dropdown value is "{option_text}"'))
 def verify_selected_option(browser, option_text):
     assert option_text == DropdownPage(browser).get_current_dropdown_value()

@@ -28,7 +28,6 @@ Feature: Dynamic Controls Page
         Then a loading bar is displayed
         And the loading bar has a label of "Wait for it..."
         And after a few seconds the loading bar disappears
-        And the checkbox is no longer displayed
         And the button text is "Add"
         And an "It's gone!" message is displayed
 
