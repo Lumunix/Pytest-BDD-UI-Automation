@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "pytest-bdd-ui-automation"
+name = "pytest_bdd_ui_automation"
 version = "0.1.0"
 description = ""
 authors = ["Lumunix <lumunix@icloud.com>"]
