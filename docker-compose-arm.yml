@@ -5,6 +5,7 @@ version: "3"
 services:
     node-chrome:
       image: seleniarm/node-chromium:107.0
+      platform: linux/arm64
       volumes:
         - ./assets:/opt/selenium/assets
         - ./config.toml:/opt/bin/config.toml
@@ -19,6 +20,7 @@ services:
         - SE_NODE_MAX_SESSIONS=3
         - VNC_NO_PASSWORD=1
     seleniarm-hub:
+      platform: linux/arm64
       image: seleniarm/hub:4.5.3-20221025
       container_name: seleniarm-hub
       ports:
@@ -27,6 +29,7 @@ services:
         - "4444:4444"
     allure:
       image: "frankescobar/allure-docker-service"
+      platform: linux/arm64
       environment:
         CHECK_RESULTS_EVERY_SECONDS: 1
         KEEP_HISTORY: 1
@@ -37,6 +40,7 @@ services:
         - ${PWD}/allure-reports:/app/default-reports
     allure-ui:
       image: "frankescobar/allure-docker-service-ui"
+      platform: linux/arm64
       environment:
         ALLURE_DOCKER_PUBLIC_API_URL: "http://localhost:5050"
         ALLURE_DOCKER_PUBLIC_API_URL_PREFIX: ""
